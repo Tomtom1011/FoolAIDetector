@@ -1,6 +1,6 @@
 package domain.augmentation.infrastructure;
 
-import domain.augmentation.types.noice.NoiceConfiguration;
+import domain.augmentation.types.image.noice.NoiceConfiguration;
 
 public class ConfigurationFactory {
 

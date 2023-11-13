@@ -1,4 +1,4 @@
-package domain.augmentation.types.noice;
+package domain.augmentation.types.image.noice;
 
 import domain.augmentation.infrastructure.AugmentationConfiguration;
 

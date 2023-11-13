@@ -1,4 +1,4 @@
-package domain.augmentation.types.noice;
+package domain.augmentation.types.image.noice;
 
 import domain.augmentation.infrastructure.ImageAugmentation;
 import domain.augmentation.infrastructure.AugmentationData;
@@ -20,7 +20,6 @@ public class NoiceAugmentation extends ImageAugmentation {
 
     @Override
     public void transform(AugmentationData data) {
-
         BufferedImage image = data.getImage();
 
         for (int x = 0; x < image.getWidth(); x++) {

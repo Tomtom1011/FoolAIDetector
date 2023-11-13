@@ -3,7 +3,7 @@ package domain;
 import config.ProgramConfig;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.ImageAugmentation;
-import domain.augmentation.types.noice.NoiceAugmentation;
+import domain.augmentation.types.image.noice.NoiceAugmentation;
 import domain.sequence.AugmentationSequence;
 
 import javax.imageio.ImageIO;
