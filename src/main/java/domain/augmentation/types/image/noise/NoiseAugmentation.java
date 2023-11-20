@@ -1,4 +1,4 @@
-package domain.augmentation.types.image.noice;
+package domain.augmentation.types.image.noise;
 
 import domain.augmentation.infrastructure.ImageAugmentation;
 import domain.augmentation.infrastructure.AugmentationData;

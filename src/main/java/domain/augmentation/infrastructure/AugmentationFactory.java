@@ -1,7 +1,7 @@
 package domain.augmentation.infrastructure;
 
-import domain.augmentation.types.image.noice.NoiseAugmentation;
-import domain.augmentation.types.image.noice.NoiseConfiguration;
+import domain.augmentation.types.image.noise.NoiseAugmentation;
+import domain.augmentation.types.image.noise.NoiseConfiguration;
 
 public class AugmentationFactory {
 
