@@ -1,16 +1,16 @@
 package domain.augmentation.infrastructure;
 
-import domain.augmentation.types.image.noice.NoiceAugmentation;
-import domain.augmentation.types.image.noice.NoiceConfiguration;
+import domain.augmentation.types.image.noice.NoiseAugmentation;
+import domain.augmentation.types.image.noice.NoiseConfiguration;
 
 public class AugmentationFactory {
 
-    public static NoiceAugmentation createRandomNoiceAugmentation() {
-        NoiceConfiguration config = ConfigurationFactory.createRandomNoiceConfig();
-        return new NoiceAugmentation(config);
+    public static NoiseAugmentation createRandomNoiceAugmentation() {
+        NoiseConfiguration config = ConfigurationFactory.createRandomNoiceConfig();
+        return new NoiseAugmentation(config);
     }
 
-    public static NoiceAugmentation createNoiceAugmentation(NoiceConfiguration config) {
-        return new NoiceAugmentation(config);
+    public static NoiseAugmentation createNoiceAugmentation(NoiseConfiguration config) {
+        return new NoiseAugmentation(config);
     }
 }

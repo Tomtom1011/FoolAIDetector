@@ -2,17 +2,17 @@ package domain.augmentation.types.image.noice;
 
 import domain.augmentation.infrastructure.AugmentationConfiguration;
 
-public class NoiceConfiguration extends AugmentationConfiguration<NoiceConfiguration> {
+public class NoiseConfiguration extends AugmentationConfiguration<NoiseConfiguration> {
 
     // TODO set fix limits for random generator and configuration of noice augmentation
 
     @Override
-    public NoiceConfiguration createRandomConfiguration() {
+    public NoiseConfiguration createRandomConfiguration() {
         return null;
     }
 
     @Override
-    public NoiceConfiguration createBestConfiguration() {
+    public NoiseConfiguration createBestConfiguration() {
         return null;
     }
 }
