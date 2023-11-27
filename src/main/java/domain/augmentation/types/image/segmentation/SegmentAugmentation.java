@@ -16,6 +16,7 @@ public class SegmentAugmentation extends ImageAugmentation {
         BufferedImage image = data.getImage();
 
         int segmentSize = 3;
+        data.setSegmentSize(3);
 
         // Segment the image
         List<BufferedImage> segments = segmentImage(image, segmentSize);
@@ -29,8 +30,8 @@ public class SegmentAugmentation extends ImageAugmentation {
 
         List<BufferedImage> segments = new ArrayList<>();
 
-        for (int i = 0; i < imageHeight; i += segmentSize) {
-            for (int j = 0; j < imageWidth; j += segmentSize) {
+        for (int i = 0; i < imageWidth; i += segmentSize) {
+            for (int j = 0; j < imageHeight ; j += segmentSize) {
                 int segmentWidth = Math.min(segmentSize, imageWidth - i);
                 int segmentHeight = Math.min(segmentSize, imageHeight - j);
 
@@ -40,10 +41,10 @@ public class SegmentAugmentation extends ImageAugmentation {
                 }
 
                 BufferedImage segment = image.getSubimage(i, j, segmentWidth, segmentHeight);
+
                 segments.add(segment);
             }
         }
-
         return segments;
     }
 

@@ -13,8 +13,6 @@ public class ApplyFilter extends ImageAugmentation {
     @Override
     public void transform(AugmentationData data) {
 
-        BufferedImage image = data.getImage();
-
         List<double[][][]> segmentMatrices = data.getSegmentMatrices();
 
         for (double[][][] segmentMatrix  : segmentMatrices) {
@@ -26,6 +24,7 @@ public class ApplyFilter extends ImageAugmentation {
     }
 
     private double[][][] applyFilter(double[][][] matrix) {
-        return matrix;}
+        return matrix;
+    }
 
 }

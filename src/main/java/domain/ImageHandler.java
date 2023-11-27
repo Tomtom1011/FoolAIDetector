@@ -34,7 +34,7 @@ public class ImageHandler implements TypeHandler {
             sequence.addAugmentation(new SegmentAugmentation());
             sequence.addAugmentation(new Matricization());
             sequence.addAugmentation(new ApplyFilter());
-            //sequence.addAugmentation(new Reconstruct());
+            sequence.addAugmentation(new Reconstruct());
 
             // run augmentation sequence
             sequence.run(data);

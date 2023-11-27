@@ -18,6 +18,8 @@ public class AugmentationData {
     
     private List<BufferedImage> segments;
 
+    private int segmentSize;
+
     private List<double[][][]> segmentMatrices = new ArrayList();
 
     List<double[][][]> filteredMatrices = new ArrayList();

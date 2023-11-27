@@ -6,40 +6,37 @@ import domain.augmentation.infrastructure.AugmentationData;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Reconstruct extends ImageAugmentation {
 
     @Override
     public void transform(AugmentationData data) {
-
-        List<double[][][]> filteredMatrices = data.getFilteredMatrices();
-        BufferedImage reconstructedImage = convertMatricesToImage(filteredMatrices);
-        data.setImage(reconstructedImage);
+        convertMatricesToImage(data);
 
     }
 
-    private BufferedImage convertMatricesToImage(List<double[][][]> filteredMatrices) {
-        int width = filteredMatrices.size();  // Use the length of the list
-        int height = filteredMatrices.get(0)[0].length;
+    private void convertMatricesToImage(AugmentationData data) {
+        int column = -1;
+        // Iterate through the matrices and modify the original image
+        for (int i = 0; i < (data.getFilteredMatrices().size()); i++) {
+            
+            double[][][] matrix = data.getFilteredMatrices().get(i);
 
-        // Create a new image
-        BufferedImage reconstructedImage = new BufferedImage(width * height, height, BufferedImage.TYPE_INT_RGB);
+            if (i%(data.getImage().getHeight()/data.getSegmentSize()) == 0){
+                column++;
+            }
 
-        // Iterate through the matrices and fill in the image
-        for (int i = 0; i < filteredMatrices.size(); i++) {
-            double[][][] matrix = filteredMatrices.get(i);
-
-            // Iterate through the matrix and set pixel values in the image
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
+            for (int x = 0; x < matrix.length; x++) {
+                for (int y = 0; y < matrix[0].length ; y++) {
                     int rgb = ((int) matrix[x][y][0] << 16) | ((int) matrix[x][y][1] << 8) | (int) matrix[x][y][2];
-                    reconstructedImage.setRGB(i * width + x, y, rgb);
+                    data.getImage().setRGB(((column*data.getSegmentSize()) + x), ((i%(data.getImage().getHeight()-2))+y), rgb);
+                    //System.out.println(((column*data.getSegmentSize()) + x) + ", " + ((i%(data.getImage().getHeight()-2))+y));
                 }
+
             }
         }
-
-        return reconstructedImage;
     }
 
 }
