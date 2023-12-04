@@ -30,6 +30,8 @@ public class AugmentationSequence<T extends AbstractAugmentation> {
 
         int resultPercentage = checkAIPercentageForData(data);
 
+        System.out.println(gatherConfigurationData(resultPercentage));
+
         if (hasBetterResult(resultPercentage)) {
             persistSequenceConfiguration(resultPercentage);
         }
@@ -41,12 +43,16 @@ public class AugmentationSequence<T extends AbstractAugmentation> {
     }
 
     private void persistSequenceConfiguration(int result) {
+        String data = gatherConfigurationData(result);
+        SequenceConfigurationFilePersistence.persistDataToFile(data);
+    }
+
+    private String gatherConfigurationData(int result) {
         String dataToPersist = "Result:" + result + "\n";
         dataToPersist += augmentations.stream()
                 .map(a -> a.getClass().getSimpleName() + ": \n" + a.getConfiguration().getConfigurationToPersist())
                 .collect(Collectors.joining("\n"));
-
-        SequenceConfigurationFilePersistence.persistDataToFile(dataToPersist);
+        return dataToPersist;
     }
 
     private boolean hasBetterResult(int percentage) {
