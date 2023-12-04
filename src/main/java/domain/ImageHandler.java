@@ -3,7 +3,7 @@ package domain;
 import config.ProgramConfig;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.ImageAugmentation;
-import domain.augmentation.types.image.noice.NoiceAugmentation;
+import domain.augmentation.types.image.noice.ExampleNoiceAugmentation;
 import domain.sequence.AugmentationSequence;
 
 import javax.imageio.ImageIO;
@@ -26,7 +26,7 @@ public class ImageHandler implements TypeHandler {
 
             // create a augmentation sequence
             AugmentationSequence<ImageAugmentation> sequence = new AugmentationSequence<>();
-            sequence.addAugmentation(new NoiceAugmentation());
+            sequence.addAugmentation(new ExampleNoiceAugmentation());
 
             // run augmentation sequence
             sequence.run(data);

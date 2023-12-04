@@ -1,20 +1,21 @@
 package domain.augmentation.types.image.noice;
 
+import domain.augmentation.infrastructure.AugmentationConfiguration;
 import domain.augmentation.infrastructure.ImageAugmentation;
 import domain.augmentation.infrastructure.AugmentationData;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class NoiceAugmentation extends ImageAugmentation {
+public class ExampleNoiceAugmentation extends ImageAugmentation {
 
-    private final NoiceConfiguration config;
+    private final ExampleNoiceConfiguration config;
 
-    public NoiceAugmentation() {
-        config = new NoiceConfiguration().createRandomConfiguration();
+    public ExampleNoiceAugmentation() {
+        config = new ExampleNoiceConfiguration().createRandomConfiguration();
     }
 
-    public NoiceAugmentation(NoiceConfiguration config) {
+    public ExampleNoiceAugmentation(ExampleNoiceConfiguration config) {
         this.config = config;
     }
 
@@ -36,5 +37,10 @@ public class NoiceAugmentation extends ImageAugmentation {
             }
         }
 
+    }
+
+    @Override
+    public AugmentationConfiguration<?> getConfiguration() {
+        return config;
     }
 }
