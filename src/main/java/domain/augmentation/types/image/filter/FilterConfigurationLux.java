@@ -1,17 +1,18 @@
 package domain.augmentation.types.image.filter;
 
 import domain.augmentation.infrastructure.AugmentationConfiguration;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 public class FilterConfigurationLux extends AugmentationConfiguration<FilterConfigurationLux> {
 
-    private final int filterMin = 0;
-    private final int filterMax = 3;
+    private final double filterMin = -0.2;
+    private final double filterMax = 0.4;
     private final int filterSize = 3;
-    private int[][] filter;
+    private final double maxChangeValue = 1.5;
+    private double[][] filter;
 
     @Override
     public String getConfigurationToPersist() {
@@ -20,15 +21,8 @@ public class FilterConfigurationLux extends AugmentationConfiguration<FilterConf
 
     @Override
     public FilterConfigurationLux createRandomConfiguration() {
-        FilterConfigurationLux config = new FilterConfigurationLux();
-        int[][] filter = new int[filterSize][filterSize];
-        for (int x = 0; x < filter.length; x++) {
-            for (int y = 0; y < filter[x].length; y++) {
-                filter[x][y] = createRandomNumber(filterMin, filterMax);
-            }
-        }
-        config.setFilter(filter);
-        return config;
+        double[][] filter = initializeArray();
+        return new FilterConfigurationLux(filter);
     }
 
     @Override
@@ -46,7 +40,7 @@ public class FilterConfigurationLux extends AugmentationConfiguration<FilterConf
         return null;
     }
 
-    private String printTwoDimArray(int[][] array) {
+    private String printTwoDimArray(double[][] array) {
         StringBuilder filter = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++) {
@@ -55,5 +49,24 @@ public class FilterConfigurationLux extends AugmentationConfiguration<FilterConf
             filter.append("\n");
         }
         return filter.toString();
+    }
+
+    private double[][] initializeArray() {
+        double[][] randomArray = new double[filterSize][filterSize];
+        double sum = 0.0;
+
+        for (int x = 0; x < filterSize; x++) {
+            for (int y = 0; y < filterSize; y++) {
+                double randomValue = createRandomDouble(filterMin, filterMax);
+                randomArray[x][y] = randomValue;
+
+                sum += randomValue;
+                if (sum > maxChangeValue) {
+                    randomArray[x][y] -= (sum - maxChangeValue);
+                    sum = maxChangeValue;
+                }
+            }
+        }
+        return randomArray;
     }
 }

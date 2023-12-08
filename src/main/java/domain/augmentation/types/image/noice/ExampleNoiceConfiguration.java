@@ -15,7 +15,7 @@ public class ExampleNoiceConfiguration extends AugmentationConfiguration<Example
     @Override
     public ExampleNoiceConfiguration createRandomConfiguration() {
         ExampleNoiceConfiguration config = new ExampleNoiceConfiguration();
-        config.setActNoice(createRandomNumber(minNoice, maxNoice));
+        config.setActNoice(createRandomInteger(minNoice, maxNoice));
         return config;
     }
 

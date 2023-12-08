@@ -43,4 +43,9 @@ public class ExampleNoiceAugmentation extends ImageAugmentation {
     public AugmentationConfiguration<?> getConfiguration() {
         return config;
     }
+
+    @Override
+    public void mutate() {
+
+    }
 }

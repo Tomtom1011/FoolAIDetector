@@ -4,6 +4,8 @@ import config.ProgramConfig;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.ImageAugmentation;
 import domain.augmentation.types.image.filter.FilterAugmentationLux;
+import domain.augmentation.types.image.filter.FilterConfigurationLux;
+import domain.augmentation.types.image.noice.ExampleNoiceAugmentation;
 import domain.sequence.AugmentationSequence;
 
 import javax.imageio.ImageIO;
@@ -26,7 +28,18 @@ public class ImageHandler implements TypeHandler {
 
             // create a augmentation sequence
             AugmentationSequence<ImageAugmentation> sequence = new AugmentationSequence<>();
+
+//            double[][] filter = new double[][]
+//                    {
+//                        {0.28, -0.17, 0.14},
+//                        {0.47, 0.11, -0.18},
+//                        {0.2, 0.06, -0.14}
+//                    };
+//            FilterConfigurationLux filterConfig = FilterConfigurationLux.builder()
+//                    .filter(filter).build();
+
             sequence.addAugmentation(new FilterAugmentationLux());
+//            sequence.addAugmentation(new ExampleNoiceAugmentation());
 
             // run augmentation sequence
             sequence.run(data);

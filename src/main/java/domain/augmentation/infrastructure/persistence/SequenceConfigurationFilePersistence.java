@@ -15,15 +15,15 @@ public class SequenceConfigurationFilePersistence {
         }
     }
 
-    public static int readBestResult() {
-        int result = 100;
+    public static double readBestResult() {
+        double result = 100;
         File file = new File(PERSISTENCE_PATH);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
             String line;
             while ( (line = reader.readLine()) != null) {
                 if (line.contains("Result:")) {
-                    result = Integer.parseInt(line.replace("Result:", ""));
+                    result = Double.parseDouble(line.replace("Result:", ""));
                     break;
                 }
             }
