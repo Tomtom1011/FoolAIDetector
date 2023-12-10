@@ -3,13 +3,16 @@ package domain.sequence;
 import domain.augmentation.infrastructure.AbstractAugmentation;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.persistence.SequenceConfigurationFilePersistence;
+import domain.geneticalgorithm.GeneticSolvable;
+import domain.geneticalgorithm.Individual;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-public class AugmentationSequence<T extends AbstractAugmentation> {
+public class AugmentationSequence<T extends AbstractAugmentation> implements GeneticSolvable {
 
     private final Queue<T> augmentations = new LinkedList<>();
     private double bestResult;
@@ -27,33 +30,23 @@ public class AugmentationSequence<T extends AbstractAugmentation> {
     }
 
     public void run(AugmentationData data) {
+        augmentations.forEach(a -> a.transform(data));
+        try {
+            checkForResult(data);
+        } catch (IOException ioe) {
+            System.out.println("Could not get result for image");
+            ioe.printStackTrace();
+        }
+    }
 
-//        int iterationNumber = 100;
+    private void checkForResult(AugmentationData freshData) throws IOException {
+        double resultPercentage = checkAIPercentageForData(freshData);
 
-//        for (int i = 0; i < iterationNumber; i++) {
+        System.out.println(gatherConfigurationData(resultPercentage));
 
-            AugmentationData freshData = data.copy();
-
-            augmentations.forEach(a -> a.transform(freshData));
-
-            try {
-                double resultPercentage = checkAIPercentageForData(freshData);
-
-                System.out.println(gatherConfigurationData(resultPercentage));
-
-                if (hasBetterResult(resultPercentage)) {
-                    persistSequenceConfiguration(resultPercentage);
-                }
-
-//                augmentations.stream()
-//                        .map(AbstractAugmentation::getConfiguration)
-//                        .forEach(c -> mutate(resultPercentage));
-
-            } catch (IOException ioe) {
-                System.out.println("Could not get result for image");
-                ioe.printStackTrace();
-            }
-//        }
+        if (hasBetterResult(resultPercentage)) {
+            persistSequenceConfiguration(resultPercentage);
+        }
     }
 
     private double checkAIPercentageForData(AugmentationData data) throws IOException {
@@ -95,5 +88,23 @@ public class AugmentationSequence<T extends AbstractAugmentation> {
 
     public void mutate() {
         augmentations.forEach(AbstractAugmentation::mutate);
+    }
+
+    @Override
+    public Individual createIndividual() {
+        AugmentationSequence newSeq = new AugmentationSequence<>();
+        augmentations.stream().forEach(newSeq::addAugmentation);
+
+
+
+        Individual i = new Individual();
+        // TODO
+        return null;
+    }
+
+    @Override
+    public List<AugmentationSequence<?>> crossOver(Individual parent1, Individual parent2) {
+        // TODO
+        return null;
     }
 }

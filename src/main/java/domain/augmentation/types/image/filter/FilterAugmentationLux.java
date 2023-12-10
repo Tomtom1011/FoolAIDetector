@@ -11,7 +11,7 @@ import java.awt.image.Raster;
 
 public class FilterAugmentationLux extends ImageAugmentation {
 
-    private final FilterConfigurationLux config;
+    private FilterConfigurationLux config;
 
     public FilterAugmentationLux() {
         config = FilterConfigurationLux.builder().build().createRandomConfiguration();;
@@ -65,6 +65,11 @@ public class FilterAugmentationLux extends ImageAugmentation {
     @Override
     public AugmentationConfiguration<?> getConfiguration() {
         return config;
+    }
+
+    @Override
+    public void setConfiguration(AugmentationConfiguration config) {
+        this.config = (FilterConfigurationLux) config;
     }
 
     @Override

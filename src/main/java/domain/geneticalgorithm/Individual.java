@@ -1,5 +1,6 @@
 package domain.geneticalgorithm;
 
+import domain.augmentation.infrastructure.AugmentationData;
 import domain.sequence.AugmentationSequence;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +16,10 @@ public class Individual {
 
     public Individual(AugmentationSequence<?> sequence) {
         this.sequence = sequence;
+    }
+
+    public void calculateFitness(AugmentationData data) {
+        sequence.run(data);
+
     }
 }

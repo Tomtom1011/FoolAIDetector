@@ -1,5 +1,6 @@
 package domain.geneticalgorithm;
 
+import domain.augmentation.infrastructure.AugmentationData;
 import domain.sequence.AugmentationSequence;
 
 import java.util.ArrayList;
@@ -8,49 +9,64 @@ import java.util.List;
 
 public class GeneticAlgorithm {
 
-    private int numberOfIndividuals = 5;
-    private int iterationNumber = 100;
+    private static final int INITIAL_POP_SIZE = 10;
+    private static final int MAX_ITERATIONS = 100;
+    public static final int MAX_SELECTION_SIZE = 4;
 
-    private AugmentationSequence rootSequence;
+    public static AugmentationSequence<?> solve(GeneticSolvable solver, AugmentationData data) {
+        List<Individual> individuals = generateIndividuals(solver);
+        AugmentationSequence<?> best = individuals.get(0).getSequence();
 
-    public void solve(AugmentationSequence rootSequence) {
-        this.rootSequence = rootSequence;
-        for (int i = 0; i < iterationNumber; i++) {
+        for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
+            calculateIndividuals(individuals, data);
 
-            List<Individual> individuals = generateIndividuals();
+            List<Individual> bestOfPopulation = selectIndividualsForNextGeneration(individuals);
+            best = bestOfPopulation.get(0).getSequence();
 
-            List<Individual> best = selectIndividualsForNextGeneration(individuals);
-
-            List<Individual> children = crossOver(best);
+            List<Individual> children = crossOver(solver, bestOfPopulation);
 
             mutate(children);
+
+            individuals = children;
+            fillIndividuals(solver, individuals);
         }
+        return best;
     }
 
-    private List<Individual> generateIndividuals() {
+    private static void calculateIndividuals(List<Individual> individuals, AugmentationData data) {
+        individuals.forEach(i -> i.calculateFitness(data.copy()));
+    }
+
+    private static List<Individual> generateIndividuals(GeneticSolvable solver) {
         ArrayList<Individual> individuals = new ArrayList<>();
 
-        for (int i = 0; i < numberOfIndividuals; i++) {
-            individuals.add(new Individual(sequence));
+        for (int individualIndex = 0; individualIndex < INITIAL_POP_SIZE; individualIndex++) {
+            individuals.add(solver.createIndividual());
         }
         return individuals;
     }
 
-    private List<Individual> selectIndividualsForNextGeneration(List<Individual> individuals) {
+    private static void fillIndividuals(GeneticSolvable solver, List<Individual> individuals) {
+        while (individuals.size() <= INITIAL_POP_SIZE) {
+            individuals.add(solver.createIndividual());
+        }
+    }
+
+    private static List<Individual> selectIndividualsForNextGeneration(List<Individual> individuals) {
         return individuals.stream()
                 .sorted(Comparator.comparing(Individual::getFitness))
-                .limit(2)
+                .limit(MAX_SELECTION_SIZE)
                 .toList();
     }
 
-    private List<Individual> crossOver(List<Individual> parents) {
+    private static List<Individual> crossOver(GeneticSolvable solver, List<Individual> parents) {
         ArrayList<Individual> children = new ArrayList<>();
 
         for (int i = 0; i < parents.size(); i=i+2) {
             Individual parent1 = parents.get(i);
             Individual parent2 = parents.get(i+1);
 
-            List<AugmentationSequence<?>> childSequences = parent1.getSequence().crossOver(parent2.getSequence());
+            List<AugmentationSequence<?>> childSequences = solver.crossOver(parent1, parent2);
             for (AugmentationSequence<?> seq : childSequences) {
                 children.add(new Individual(seq));
             }
@@ -58,7 +74,7 @@ public class GeneticAlgorithm {
         return children;
     }
 
-    private void mutate(List<Individual> children) {
+    private static void mutate(List<Individual> children) {
         children.stream()
                 .map(Individual::getSequence)
                 .forEach(AugmentationSequence::mutate);
