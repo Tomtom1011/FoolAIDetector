@@ -3,7 +3,11 @@ package domain;
 import config.ProgramConfig;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.ImageAugmentation;
-import domain.augmentation.types.image.filter.FilterAugmentationLux;
+
+import domain.augmentation.types.image.FilterApplication.ApplyFilter;
+
+import domain.augmentation.types.image.noise.NoiseAugmentation;
+
 import domain.sequence.AugmentationSequence;
 
 import javax.imageio.ImageIO;
@@ -26,7 +30,11 @@ public class ImageHandler implements TypeHandler {
 
             // create a augmentation sequence
             AugmentationSequence<ImageAugmentation> sequence = new AugmentationSequence<>();
-            sequence.addAugmentation(new FilterAugmentationLux());
+          
+            //sequence.addAugmentation(new NoiseAugmentation());
+            sequence.addAugmentation(new ApplyFilter());
+
+
 
             // run augmentation sequence
             sequence.run(data);
