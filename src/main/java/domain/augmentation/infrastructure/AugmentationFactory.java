@@ -12,5 +12,6 @@ public class AugmentationFactory {
 
     public static NoiseAugmentation createNoiceAugmentation(NoiseConfiguration config) {
         return new NoiseAugmentation(config);
+
     }
 }

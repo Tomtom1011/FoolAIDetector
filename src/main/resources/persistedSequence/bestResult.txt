@@ -1,0 +1,3 @@
+Result:99
+ExampleNoiceAugmentation: 
+{maxNoice=5, actNoice=4, minNoice=1}
