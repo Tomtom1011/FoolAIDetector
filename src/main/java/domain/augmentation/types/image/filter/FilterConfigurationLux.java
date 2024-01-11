@@ -1,34 +1,37 @@
 package domain.augmentation.types.image.filter;
 
 import domain.augmentation.infrastructure.AugmentationConfiguration;
-import lombok.Getter;
-import lombok.Setter;
+import domain.augmentation.infrastructure.AugmentationData;
+import lombok.*;
 
 @Getter
 @Setter
 public class FilterConfigurationLux extends AugmentationConfiguration<FilterConfigurationLux> {
 
-    private final int filterMin = 0;
-    private final int filterMax = 3;
+    private final double filterMin = -0.05;
+    private final double filterMax = 0.3;
     private final int filterSize = 3;
-    private int[][] filter;
+    private final double maxChangeValue = 1.5;
+    private double[][] filter;
+    private double result;
+    private AugmentationData changed;
+
+    public FilterConfigurationLux() {
+        setFilter(createRandomConfiguration().getFilter());
+    }
+
+    public FilterConfigurationLux(double[][] filter) {
+        setFilter(filter);
+    }
 
     @Override
     public String getConfigurationToPersist() {
         return toString();
     }
 
-    @Override
     public FilterConfigurationLux createRandomConfiguration() {
-        FilterConfigurationLux config = new FilterConfigurationLux();
-        int[][] filter = new int[filterSize][filterSize];
-        for (int x = 0; x < filter.length; x++) {
-            for (int y = 0; y < filter[x].length; y++) {
-                filter[x][y] = createRandomNumber(filterMin, filterMax);
-            }
-        }
-        config.setFilter(filter);
-        return config;
+        double[][] filter = initializeArray();
+        return new FilterConfigurationLux(filter);
     }
 
     @Override
@@ -38,6 +41,7 @@ public class FilterConfigurationLux extends AugmentationConfiguration<FilterConf
                 ", filterMax=" + filterMax +
                 ", filterSize=" + filterSize +
                 ", filter:\n" + printTwoDimArray(filter) +
+                ", result=" + result +
                 '}';
     }
 
@@ -46,14 +50,33 @@ public class FilterConfigurationLux extends AugmentationConfiguration<FilterConf
         return null;
     }
 
-    private String printTwoDimArray(int[][] array) {
+    private String printTwoDimArray(double[][] array) {
         StringBuilder filter = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++) {
-                filter.append(array[i][j]).append(" ");
+                filter.append(array[i][j]).append(", ");
             }
             filter.append("\n");
         }
         return filter.toString();
+    }
+
+    private double[][] initializeArray() {
+        double[][] randomArray = new double[filterSize][filterSize];
+        double sum = 0.0;
+
+        for (int x = 0; x < filterSize; x++) {
+            for (int y = 0; y < filterSize; y++) {
+                double randomValue = createRandomDouble(filterMin, filterMax);
+                randomArray[x][y] = randomValue;
+
+                sum += randomValue;
+                if (sum > maxChangeValue) {
+                    randomArray[x][y] -= (sum - maxChangeValue);
+                    sum = maxChangeValue;
+                }
+            }
+        }
+        return randomArray;
     }
 }

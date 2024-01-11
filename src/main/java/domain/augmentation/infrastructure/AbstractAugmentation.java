@@ -6,4 +6,5 @@ public abstract class AbstractAugmentation {
 
     public abstract AugmentationConfiguration<?> getConfiguration();
 
+    public abstract void setConfiguration(AugmentationConfiguration config);
 }
