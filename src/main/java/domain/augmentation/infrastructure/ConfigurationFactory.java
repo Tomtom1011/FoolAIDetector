@@ -1,11 +1,12 @@
 package domain.augmentation.infrastructure;
 
-import domain.augmentation.types.image.noice.ExampleNoiceConfiguration;
+import domain.augmentation.types.image.noise.NoiseConfiguration;
 
 public class ConfigurationFactory {
 
-    public static ExampleNoiceConfiguration createRandomNoiceConfig() {
-        return new ExampleNoiceConfiguration().createRandomConfiguration();
+    public static NoiseConfiguration createRandomNoiceConfig() {
+        return new NoiseConfiguration().createRandomConfiguration();
+
     }
 
 
