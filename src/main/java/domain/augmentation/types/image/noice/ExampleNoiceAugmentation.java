@@ -6,10 +6,12 @@ import domain.augmentation.infrastructure.AugmentationData;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class ExampleNoiceAugmentation extends ImageAugmentation {
 
     private ExampleNoiceConfiguration config;
+    private Random random = new Random();
 
     public ExampleNoiceAugmentation() {
         config = new ExampleNoiceConfiguration().createRandomConfiguration();
@@ -31,6 +33,10 @@ public class ExampleNoiceAugmentation extends ImageAugmentation {
                 int green = (color & 0xff00) >> 8;
                 int red = (color & 0xff0000) >> 16;
                 int alpha = (color & 0xff000000) >>> 24;
+
+                blue = Math.min(blue + random.nextInt(100), 255);
+                green = Math.min(green + random.nextInt(100), 255);
+                red = Math.min(red + random.nextInt(100), 255);
 
                 alpha = 127;
                 image.setRGB(x, y, new Color(red, green, blue, alpha).getRGB());
