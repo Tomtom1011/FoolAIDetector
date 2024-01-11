@@ -3,16 +3,13 @@ package domain.sequence;
 import domain.augmentation.infrastructure.AbstractAugmentation;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.persistence.SequenceConfigurationFilePersistence;
-import domain.geneticalgorithm.GeneticSolvable;
-import domain.geneticalgorithm.Individual;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-public class AugmentationSequence<T extends AbstractAugmentation> implements GeneticSolvable {
+public class AugmentationSequence<T extends AbstractAugmentation> {
 
     private final Queue<T> augmentations = new LinkedList<>();
     private double bestResult;
@@ -29,17 +26,24 @@ public class AugmentationSequence<T extends AbstractAugmentation> implements Gen
         return augmentations.remove(augment);
     }
 
-    public void run(AugmentationData data) {
+    public double run(AugmentationData data) {
         augmentations.forEach(a -> a.transform(data));
-        try {
-            checkForResult(data);
-        } catch (IOException ioe) {
-            System.out.println("Could not get result for image");
-            ioe.printStackTrace();
-        }
+        int tryCount = 0;
+        do {
+            try {
+                return checkForResult(data);
+            } catch (IOException e) {
+                if (tryCount > 2) {
+                    System.out.println("Could not check for result");
+                    e.printStackTrace();
+                    return 100;
+                }
+                tryCount++;
+            }
+        } while (true);
     }
 
-    private void checkForResult(AugmentationData freshData) throws IOException {
+    private double checkForResult(AugmentationData freshData) throws IOException {
         double resultPercentage = checkAIPercentageForData(freshData);
 
         System.out.println(gatherConfigurationData(resultPercentage));
@@ -47,10 +51,11 @@ public class AugmentationSequence<T extends AbstractAugmentation> implements Gen
         if (hasBetterResult(resultPercentage)) {
             persistSequenceConfiguration(resultPercentage);
         }
+        return resultPercentage;
     }
 
     private double checkAIPercentageForData(AugmentationData data) throws IOException {
-        // TODO check ai percentage for data and return percentage as int
+        // TODO check ai percentage for data and return percentage as double
         return TemporaryResultChecker.checkResult(data.getImage());
     }
 
@@ -82,29 +87,4 @@ public class AugmentationSequence<T extends AbstractAugmentation> implements Gen
         this.bestResult = SequenceConfigurationFilePersistence.readBestResult();
     }
 
-    public Queue<T> getAugmentations() {
-        return augmentations;
-    }
-
-    public void mutate() {
-        augmentations.forEach(AbstractAugmentation::mutate);
-    }
-
-    @Override
-    public Individual createIndividual() {
-        AugmentationSequence newSeq = new AugmentationSequence<>();
-        augmentations.stream().forEach(newSeq::addAugmentation);
-
-
-
-        Individual i = new Individual();
-        // TODO
-        return null;
-    }
-
-    @Override
-    public List<AugmentationSequence<?>> crossOver(Individual parent1, Individual parent2) {
-        // TODO
-        return null;
-    }
 }

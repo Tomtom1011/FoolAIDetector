@@ -8,13 +8,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
+import java.util.Random;
 
 public class FilterAugmentationLux extends ImageAugmentation {
 
     private FilterConfigurationLux config;
 
     public FilterAugmentationLux() {
-        config = FilterConfigurationLux.builder().build().createRandomConfiguration();;
+        config = new FilterConfigurationLux();
     }
 
     public FilterAugmentationLux(FilterConfigurationLux config) {
@@ -72,8 +73,4 @@ public class FilterAugmentationLux extends ImageAugmentation {
         this.config = (FilterConfigurationLux) config;
     }
 
-    @Override
-    public void mutate() {
-
-    }
 }

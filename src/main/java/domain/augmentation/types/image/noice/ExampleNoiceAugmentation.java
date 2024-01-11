@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 public class ExampleNoiceAugmentation extends ImageAugmentation {
 
-    private final ExampleNoiceConfiguration config;
+    private ExampleNoiceConfiguration config;
 
     public ExampleNoiceAugmentation() {
         config = new ExampleNoiceConfiguration().createRandomConfiguration();
@@ -45,7 +45,7 @@ public class ExampleNoiceAugmentation extends ImageAugmentation {
     }
 
     @Override
-    public void mutate() {
-
+    public void setConfiguration(AugmentationConfiguration config) {
+        this.config = (ExampleNoiceConfiguration) config;
     }
 }

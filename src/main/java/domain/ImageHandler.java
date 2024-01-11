@@ -6,7 +6,6 @@ import domain.augmentation.infrastructure.ImageAugmentation;
 import domain.augmentation.types.image.filter.FilterAugmentationLux;
 import domain.augmentation.types.image.filter.FilterConfigurationLux;
 import domain.augmentation.types.image.noice.ExampleNoiceAugmentation;
-import domain.geneticalgorithm.GeneticAlgorithm;
 import domain.sequence.AugmentationSequence;
 
 import javax.imageio.ImageIO;
@@ -26,22 +25,19 @@ public class ImageHandler implements TypeHandler {
             // create a augmentation sequence
             AugmentationSequence<ImageAugmentation> sequence = new AugmentationSequence<>();
 
-//            double[][] filter = new double[][]
-//                    {
-//                        {0.28, -0.17, 0.14},
-//                        {0.47, 0.11, -0.18},
-//                        {0.2, 0.06, -0.14}
-//                    };
-//            FilterConfigurationLux filterConfig = FilterConfigurationLux.builder()
-//                    .filter(filter).build();
+            double[][] filter = new double[][]
+                    {
+                        {-0.060000000000000005, 0.03, 0.23},
+                        {0.1, 0.05, -0.03},
+                        {0.03, 0.06, -0.13}
+                    };
+            FilterConfigurationLux filterConfig = new FilterConfigurationLux(filter);
 
-            sequence.addAugmentation(new FilterAugmentationLux());
-//            sequence.addAugmentation(new ExampleNoiceAugmentation());
-
-            AugmentationSequence<?> best = GeneticAlgorithm.solve(sequence, data.copy());
+            sequence.addAugmentation(new FilterAugmentationLux(filterConfig));
+            sequence.addAugmentation(new ExampleNoiceAugmentation());
 
             // run augmentation sequence
-            best.run(data);
+            sequence.run(data);
 
             // write image
             writeImage(data, config);

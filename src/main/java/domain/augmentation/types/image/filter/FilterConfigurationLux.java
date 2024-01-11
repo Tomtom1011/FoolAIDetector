@@ -1,25 +1,34 @@
 package domain.augmentation.types.image.filter;
 
 import domain.augmentation.infrastructure.AugmentationConfiguration;
+import domain.augmentation.infrastructure.AugmentationData;
 import lombok.*;
 
 @Getter
 @Setter
-@Builder
 public class FilterConfigurationLux extends AugmentationConfiguration<FilterConfigurationLux> {
 
-    private final double filterMin = -0.2;
-    private final double filterMax = 0.4;
+    private final double filterMin = -0.05;
+    private final double filterMax = 0.3;
     private final int filterSize = 3;
     private final double maxChangeValue = 1.5;
     private double[][] filter;
+    private double result;
+    private AugmentationData changed;
+
+    public FilterConfigurationLux() {
+        setFilter(createRandomConfiguration().getFilter());
+    }
+
+    public FilterConfigurationLux(double[][] filter) {
+        setFilter(filter);
+    }
 
     @Override
     public String getConfigurationToPersist() {
         return toString();
     }
 
-    @Override
     public FilterConfigurationLux createRandomConfiguration() {
         double[][] filter = initializeArray();
         return new FilterConfigurationLux(filter);
@@ -32,6 +41,7 @@ public class FilterConfigurationLux extends AugmentationConfiguration<FilterConf
                 ", filterMax=" + filterMax +
                 ", filterSize=" + filterSize +
                 ", filter:\n" + printTwoDimArray(filter) +
+                ", result=" + result +
                 '}';
     }
 
@@ -44,7 +54,7 @@ public class FilterConfigurationLux extends AugmentationConfiguration<FilterConf
         StringBuilder filter = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++) {
-                filter.append(array[i][j]).append(" ");
+                filter.append(array[i][j]).append(", ");
             }
             filter.append("\n");
         }
