@@ -1,14 +1,14 @@
 package domain.augmentation.types.image.noise;
 
+import domain.augmentation.infrastructure.AugmentationConfiguration;
 import domain.augmentation.infrastructure.ImageAugmentation;
 import domain.augmentation.infrastructure.AugmentationData;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class NoiseAugmentation extends ImageAugmentation {
 
-    private final NoiseConfiguration config;
+    private NoiseConfiguration config;
 
     public NoiseAugmentation() {
         config = new NoiseConfiguration().createRandomConfiguration();
@@ -48,6 +48,16 @@ public class NoiseAugmentation extends ImageAugmentation {
             }
         }
 
+    }
+
+    @Override
+    public AugmentationConfiguration<?> getConfiguration() {
+        return config;
+    }
+
+    @Override
+    public void setConfiguration(AugmentationConfiguration config) {
+        this.config = (NoiseConfiguration) config;
     }
 
 }

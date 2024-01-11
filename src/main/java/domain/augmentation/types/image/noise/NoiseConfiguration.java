@@ -15,4 +15,9 @@ public class NoiseConfiguration extends AugmentationConfiguration<NoiseConfigura
     public NoiseConfiguration createBestConfiguration() {
         return null;
     }
+
+    @Override
+    public String getConfigurationToPersist() {
+        return null;
+    }
 }
