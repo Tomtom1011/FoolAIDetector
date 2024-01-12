@@ -1,5 +1,6 @@
 package domain.augmentation.types.image.FilterApplication;
 
+import domain.augmentation.infrastructure.AugmentationConfiguration;
 import domain.augmentation.infrastructure.ImageAugmentation;
 import domain.augmentation.infrastructure.AugmentationData;
 
@@ -31,8 +32,18 @@ public class ApplyFilter extends ImageAugmentation {
 
     }
 
+    @Override
+    public AugmentationConfiguration<?> getConfiguration() {
+        return null;
+    }
 
-        private static BufferedImage applyFilter(BufferedImage inputImage, float[][] filterMatrix) {
+    @Override
+    public void setConfiguration(AugmentationConfiguration config) {
+
+    }
+
+
+    private static BufferedImage applyFilter(BufferedImage inputImage, float[][] filterMatrix) {
         int width = inputImage.getWidth();
         int height = inputImage.getHeight();
 

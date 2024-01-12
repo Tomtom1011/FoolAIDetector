@@ -1,11 +1,19 @@
 package domain.sequence;
 
+import domain.analyser.Analyser;
+import domain.analyser.ExternalAnalyserService;
+import domain.analyser.model.AnalyserResult;
 import domain.augmentation.infrastructure.AbstractAugmentation;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.persistence.SequenceConfigurationFilePersistence;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
@@ -15,7 +23,7 @@ public class AugmentationSequence<T extends AbstractAugmentation> {
     private double bestResult;
 
     public AugmentationSequence() {
-        readBestResult();
+//        readBestResult();
     }
 
     public void addAugmentation(T augment) {
@@ -28,19 +36,20 @@ public class AugmentationSequence<T extends AbstractAugmentation> {
 
     public double run(AugmentationData data) {
         augmentations.forEach(a -> a.transform(data));
-        int tryCount = 0;
-        do {
-            try {
-                return checkForResult(data);
-            } catch (IOException e) {
-                if (tryCount > 2) {
-                    System.out.println("Could not check for result");
-                    e.printStackTrace();
-                    return 100;
-                }
-                tryCount++;
-            }
-        } while (true);
+        return 0;
+//        int tryCount = 0;
+//        do {
+//            try {
+//                return checkForResult(data);
+//            } catch (IOException e) {
+//                if (tryCount > 2) {
+//                    System.out.println("Could not check for result");
+//                    e.printStackTrace();
+//                    return 100;
+//                }
+//                tryCount++;
+//            }
+//        } while (true);
     }
 
     private double checkForResult(AugmentationData freshData) throws IOException {
@@ -56,7 +65,26 @@ public class AugmentationSequence<T extends AbstractAugmentation> {
 
     private double checkAIPercentageForData(AugmentationData data) throws IOException {
         // TODO check ai percentage for data and return percentage as double
+        Analyser analyser = new Analyser(new ExternalAnalyserService());
+        String base64Image = encodeToBase64(data.getImage());
+        String bodyData = "{ \"data\": [\"data:image/jpeg;base64," + base64Image + "\"] }";
+
+        Optional<AnalyserResult> result = analyser.analyseWithAiOrNot(bodyData);
+//        return result.map(AnalyserResult::getAiPercent).orElse(100.0);
+
         return TemporaryResultChecker.checkResult(data.getImage());
+    }
+
+    private static String encodeToBase64(BufferedImage image) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", baos);
+            byte[] imageBytes = baos.toByteArray();
+            return Base64.getEncoder().encodeToString(imageBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void persistSequenceConfiguration(double result) {

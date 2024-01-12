@@ -3,14 +3,8 @@ package domain;
 import config.ProgramConfig;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.ImageAugmentation;
-
-import domain.augmentation.types.image.FilterApplication.ApplyFilter;
-
-import domain.augmentation.types.image.noise.NoiseAugmentation;
-
 import domain.augmentation.types.image.filter.FilterAugmentationLux;
 import domain.augmentation.types.image.filter.FilterConfigurationLux;
-import domain.augmentation.types.image.noice.ExampleNoiceAugmentation;
 import domain.sequence.AugmentationSequence;
 
 import javax.imageio.ImageIO;
@@ -29,19 +23,15 @@ public class ImageHandler implements TypeHandler {
 
             // create a augmentation sequence
             AugmentationSequence<ImageAugmentation> sequence = new AugmentationSequence<>();
-            //sequence.addAugmentation(new NoiseAugmentation());
-            sequence.addAugmentation(new ApplyFilter());
 
-            //double[][] filter = new double[][]
-            //        {
-            //            {-0.060000000000000005, 0.03, 0.23},
-            //            {0.1, 0.05, -0.03},
-            //            {0.03, 0.06, -0.13}
-            //        };
-            //FilterConfigurationLux filterConfig = new FilterConfigurationLux(filter);
-
-            //sequence.addAugmentation(new FilterAugmentationLux(filterConfig));
-            //sequence.addAugmentation(new ExampleNoiceAugmentation());
+            double[][] filter = new double[][]
+                    {
+                            {0.04999999999999999, -0.2, 0.06},
+                            {-0.12000000000000001, 0.27999999999999997, 0.05},
+                            {0.060000000000000026, 0.14, -0.10000000000000002}
+                    };
+            FilterConfigurationLux filterConfig = new FilterConfigurationLux(filter);
+            sequence.addAugmentation(new FilterAugmentationLux(filterConfig));
 
             // run augmentation sequence
             sequence.run(data);
@@ -52,7 +42,6 @@ public class ImageHandler implements TypeHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private AugmentationData readImage(File image) throws IOException {

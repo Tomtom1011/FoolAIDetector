@@ -34,9 +34,9 @@ public class ExampleNoiceAugmentation extends ImageAugmentation {
                 int red = (color & 0xff0000) >> 16;
                 int alpha = (color & 0xff000000) >>> 24;
 
-                blue = Math.min(blue + random.nextInt(100), 255);
-                green = Math.min(green + random.nextInt(100), 255);
-                red = Math.min(red + random.nextInt(100), 255);
+                blue = Math.min(blue + random.nextInt(25), 255);
+                green = Math.min(green + random.nextInt(25), 255);
+                red = Math.min(red + random.nextInt(25), 255);
 
                 alpha = 127;
                 image.setRGB(x, y, new Color(red, green, blue, alpha).getRGB());
