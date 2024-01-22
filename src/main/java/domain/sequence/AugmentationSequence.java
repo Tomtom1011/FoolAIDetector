@@ -6,6 +6,7 @@ import domain.analyser.model.AnalyserResult;
 import domain.augmentation.infrastructure.AbstractAugmentation;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.persistence.SequenceConfigurationFilePersistence;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -68,11 +69,13 @@ public class AugmentationSequence<T extends AbstractAugmentation> {
         Analyser analyser = new Analyser(new ExternalAnalyserService());
         String base64Image = encodeToBase64(data.getImage());
         String bodyData = "{ \"data\": [\"data:image/jpeg;base64," + base64Image + "\"] }";
+//      save image data to file
+        File outputfile = new File("image.jpg");
+        ImageIO.write(data.getImage(), "jpg", outputfile);
 
-        Optional<AnalyserResult> result = analyser.analyseWithAiOrNot(bodyData);
-//        return result.map(AnalyserResult::getAiPercent).orElse(100.0);
+        Optional<AnalyserResult> result = analyser.analyse(outputfile.getAbsolutePath());
+        return result.map(AnalyserResult::getAiPercent).orElse(100.0);
 
-        return TemporaryResultChecker.checkResult(data.getImage());
     }
 
     private static String encodeToBase64(BufferedImage image) {

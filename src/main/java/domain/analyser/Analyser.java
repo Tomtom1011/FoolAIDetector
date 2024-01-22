@@ -13,6 +13,15 @@ public class Analyser {
         this.externalAnalyserService = externalAnalyserService;
     }
 
+    public Optional<AnalyserResult> analyse(String imageUrl) {
+        this.externalAnalyserService = new ExternalAnalyserService();
+        Optional<AnalyserResult> result = analyseWithIlluminarty(imageUrl);
+        System.out.println("Making request to external analyser");
+        String resultLog = result.map(AnalyserResult::toString).orElse("No result");
+        System.out.println(resultLog);
+        return result;
+    }
+
     public Optional<AnalyserResult> analyseWithAiOrNot(String imageUrl) {
         try {
             String result = externalAnalyserService.analyzeImageWithAiOrNot(imageUrl);

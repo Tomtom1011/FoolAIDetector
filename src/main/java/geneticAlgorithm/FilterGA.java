@@ -1,5 +1,8 @@
 package geneticAlgorithm;
 
+import domain.analyser.Analyser;
+import domain.analyser.ExternalAnalyserService;
+import domain.analyser.model.AnalyserResult;
 import domain.augmentation.infrastructure.AugmentationData;
 import domain.augmentation.infrastructure.persistence.SequenceConfigurationFilePersistence;
 import domain.augmentation.types.image.filter.FilterAugmentationLux;
@@ -10,10 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class FilterGA {
 
@@ -75,9 +75,8 @@ public class FilterGA {
             int tryCount = 0;
             do {
                 try {
-                    double result = TemporaryResultChecker.checkResult(copyData.getImage());
+                    double result = checkAIPercentageForData(copyData);
                     writeImage(copyData, iteration, pictureName, result + "_" + pictureName);
-                    System.out.println("checked " + result);
                     i.setResult(result);
                     notChecked = false;
                 } catch (IOException e) {
@@ -91,6 +90,17 @@ public class FilterGA {
                 }
             } while (notChecked);
         });
+    }
+    private double checkAIPercentageForData(AugmentationData data) throws IOException {
+        // TODO check ai percentage for data and return percentage as double
+        Analyser analyser = new Analyser(new ExternalAnalyserService());
+//      save image data to file
+        File outputfile = new File("image.jpg");
+        ImageIO.write(data.getImage(), "jpg", outputfile);
+
+        Optional<AnalyserResult> result = analyser.analyse(outputfile.getAbsolutePath());
+        return result.map(AnalyserResult::getAiPercent).orElse(100.0);
+
     }
 
     private void fillIndividuals(List<FilterConfigurationLux> individuals) {

@@ -12,6 +12,10 @@ public class AnalyserResult {
         this.humanPercent = humanPercent;
     }
 
+    public String toString() {
+        return "AI: " + aiPercent + "%, Human: " + humanPercent + "%";
+    }
+
     public double getAiPercent() {
         return aiPercent;
     }
